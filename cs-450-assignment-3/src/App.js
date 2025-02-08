@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Component } from "react";
+import * as d3 from "d3";
+import Child1 from "./Child1";
+import Child2 from "./Child2";
+import tips from "./tips.csv";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { data: [] };
+  }
+  componentDidMount() {
+    d3.csv(tips)
+      .then((data) => {
+        this.setState({ data });
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  render() {
+    return (
+      <div>
+        {this.state.data.length > 0 && (
+          <>
+            <Child1 data={this.state.data} />
+            <Child2 data={this.state.data} />
+          </>
+        )}
+      </div>
+    );
+  }
 }
 
 export default App;
